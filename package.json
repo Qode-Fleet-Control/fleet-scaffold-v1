@@ -1,0 +1,33 @@
+{
+  "name": "fullstack-ts-starter",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.0"
+  },
+  "overrides": {
+    "vite": "^6.0.0"
+  },
+  "scripts": {
+    "dev": "npm run dev:api & npm run dev:web",
+    "dev:api": "npm run dev --workspace @scaffold/api",
+    "dev:web": "npm run dev --workspace @scaffold/web",
+    "build": "npm run build --workspace @scaffold/web && npm run build --workspace @scaffold/api",
+    "start": "npm run start --workspace @scaffold/api",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "format": "prettier --write .",
+    "codegen": "npm run codegen --workspace @scaffold/api-spec",
+    "db:generate": "npm run generate --workspace @scaffold/db",
+    "db:migrate": "npm run migrate --workspace @scaffold/db",
+    "db:push": "npm run push --workspace @scaffold/db"
+  }
+}
