@@ -98,6 +98,15 @@ npm run test:e2e --workspace @scaffold/web   # Playwright (installs a browser on
 npm run format                     # Prettier
 ```
 
+## Claude Code skills
+
+`.claude/skills/` ships project skills that Claude Code loads automatically in this repo
+(and in repos created from it):
+
+- **replit-to-fleet** — migrate a Replit pnpm-workspace app onto this scaffold, make it
+  boot outside Replit, and add the Fleet Control run contract. Ask Claude to "migrate
+  <path-to-replit-app> onto the scaffold".
+
 ## Adding to the contract
 
 1. Add/extend a schema in `packages/shared/src/index.ts`.

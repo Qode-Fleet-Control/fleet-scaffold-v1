@@ -1,0 +1,38 @@
+// Must stay the first import: fixes cwd before modules that read bundles load.
+import "./cwd";
+import { createApp } from "./app";
+import { logger } from "./lib/logger";
+import { initializeClmsIamFoundation } from "./lib/clms-iam-runtime";
+import { startWaveBReminderWorker } from "./lib/wave-b-reminder-delivery";
+import { startJ017ScheduledReportWorker } from "./lib/j017-scheduled-distribution";
+import { startSurveyCampaignWorker } from "./lib/surveys-campaigns";
+
+const port = Number(process.env.PORT ?? 5000);
+const startupReadOnly = process.env.CLMS_STARTUP_READ_ONLY === "true";
+
+if (Number.isNaN(port) || port <= 0) {
+  throw new Error(`Invalid PORT value: "${process.env.PORT}"`);
+}
+
+async function start() {
+  await initializeClmsIamFoundation();
+  if (startupReadOnly) {
+    logger.info("CLMS startup read-only mode enabled; bootstrap writes and background workers are disabled");
+  } else {
+    startWaveBReminderWorker();
+    startJ017ScheduledReportWorker();
+    startSurveyCampaignWorker();
+  }
+  createApp().listen(port, (err) => {
+    if (err) {
+      logger.error({ err }, "Error listening on port");
+      process.exit(1);
+    }
+    logger.info({ port }, `API listening on http://localhost:${port}`);
+  });
+}
+
+start().catch((err) => {
+  logger.error({ err }, "CLMS IAM Runtime foundation failed to initialize");
+  process.exit(1);
+});
