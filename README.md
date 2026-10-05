@@ -75,13 +75,22 @@ Brings up PostgreSQL and the app (API + built web) together. No local Node or
 Postgres needed.
 
 ```bash
-docker compose up --build
+docker compose --profile local up --build
 # open http://localhost:5000
 ```
 
 The `app` container applies the schema (`db:push`) on startup, then serves the
 API and the web bundle from a single Express process. Postgres data persists in
-the `pgdata` volume. Stop with `docker compose down` (add `-v` to wipe the DB).
+the `pgdata` volume. Stop with `docker compose --profile local down` (add `-v` to wipe the DB).
+
+## On Fleet Control
+
+The fleet runs this app as containers in the coordinator's private docker: `bin/run`
+runs fleet.conf's `DOCKER_BUILD_CMD` / `DOCKER_START_CMD` (`docker compose build`, then
+`docker compose up`), with `$PORT` published and the workspace's own `DATABASE_URL`
+passed through — so the `local` Postgres profile is not started there. Without docker,
+`FLEET_RUNTIME=process bin/run` installs, builds and starts it as a plain Node process
+(it needs `DATABASE_URL`).
 
 ## Codegen (optional, spec-first)
 

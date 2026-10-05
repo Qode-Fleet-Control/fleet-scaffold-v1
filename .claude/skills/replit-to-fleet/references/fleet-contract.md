@@ -59,6 +59,12 @@ Every rule behind it:
   Running `node` directly from the repo root works because of `apps/api/src/cwd.ts`.
 - **`db:push` in BUILD_CMD**: the tester gives each QA run a fresh empty database and
   passes `DATABASE_URL` to both build and start.
+- **Docker runtime (required on the fleet)**: the fleet runs every app as containers in
+  the coordinator's private docker, through the `DOCKER_*` block at the end of
+  `assets/fleet.conf` and `assets/compose.yaml` (publish `${PORT}:${PORT}`, pass the
+  fleet's variables through by name, keep any local Postgres under the `local` profile).
+  A fleet.conf without `DOCKER_START_CMD` is refused at deploy. Keep the plain-process
+  commands above too: the QA tester self-hosts the app with them.
 - **`HEALTH_PATH` is app-relative**: the fleet adds BASE_PATH itself. Port 8000 is
   forbidden, and 5000 is fine.
 

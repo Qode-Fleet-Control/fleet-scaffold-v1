@@ -88,7 +88,8 @@ what was deliberately left out.
 
 Follow `references/fleet-contract.md`:
 - copy the template files verbatim;
-- write `fleet.conf` (start from `assets/fleet.conf`);
+- write `fleet.conf` (start from `assets/fleet.conf`, including its `DOCKER_*` block) and
+  `compose.yaml` (start from `assets/compose.yaml`) — the fleet runs the app as containers;
 - make the API independent of its working directory (`assets/cwd.ts`, imported first);
 - add BASE_PATH support: the API strips the prefix, the helmet referrer policy keeps the
   Referer header, Vite `base` comes from BASE_PATH, and `assets/base-path.ts` prefixes

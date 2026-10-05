@@ -159,7 +159,7 @@ workspace passes `npm run typecheck` with zero errors.
   commented.
 - Docker: `assets/Dockerfile` (node:22-alpine, token as BuildKit secret `npm_token`, no
   `# syntax=` line), `assets/docker-entrypoint.sh` (db:push then `node dist/index.mjs`),
-  `assets/docker-compose.yml` (secret from env, `NODE_ENV: ${NODE_ENV:-development}`).
+  `assets/compose.yaml` (secret from env, `NODE_ENV: ${NODE_ENV:-development}`).
   Rename the DB (`POSTGRES_DB`) to the app's name.
 - README: rewrite title/Layout/Prerequisites/Setup for the app; add Environment table and a
   Fleet Control section.
