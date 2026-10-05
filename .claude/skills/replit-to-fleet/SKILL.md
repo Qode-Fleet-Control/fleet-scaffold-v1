@@ -26,7 +26,7 @@ Ask for anything you can't find out yourself, and state the defaults you're usin
 |---|---|
 | Source repo path | required (e.g. `.repos/girikrishna-hub/<App>`) |
 | Target repo `<org>/<name>` | ask for the org; name defaults to `fleet-<app>-v1` |
-| Scaffold repo | `Qode-Platform/fleet-scaffold-v1` (this repo, if you're in it) |
+| Scaffold repo | `Qode-Fleet-Control/fleet-scaffold-v1` (this repo, if you're in it) |
 | npm token | whatever variable the source `.npmrc` references (classic PAT, `read:packages`) |
 | GitHub token for create/push | ask which env var (it needs Administration: write to create repos) |
 | Primary web artifact | the only `kind = "web"` artifact, excluding `mockup-sandbox`; ask if there are several |
