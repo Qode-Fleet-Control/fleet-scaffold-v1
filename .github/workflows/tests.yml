@@ -1,0 +1,49 @@
+# Tests — typecheck and unit tests for every workspace.
+#
+# The Devfab coordinator runs its code-quality check through THIS file, by name: it
+# dispatches `actions/workflows/tests.yml/dispatches` with only {"ref": "<branch>"} on each
+# task branch before merging, and once more on the base branch at plan end, then polls
+# `actions/workflows/tests.yml/runs?branch=<branch>`. So keep the file name tests.yml, keep
+# the workflow_dispatch trigger, and never add a required input — a dispatch with no inputs
+# must start a run. A missing file makes that dispatch 404 and no check runs at all.
+#
+# No secrets and no database: the unit tests (vitest) don't connect to Postgres, and the
+# generated API clients (packages/api-zod, packages/api-client-react) are committed, so no
+# codegen is needed before typecheck. If you add tests that need a database, add a
+# `services: postgres` block and set DATABASE_URL here. The docker build/run check is
+# build.yml; shipping an image is manual-deploy.yml.
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20 # matches the Dockerfile's node:20-alpine
+          cache: npm
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm test
