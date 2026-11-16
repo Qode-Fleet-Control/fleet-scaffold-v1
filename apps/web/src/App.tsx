@@ -1,5 +1,5 @@
 import { Link, Route, Switch } from "wouter";
-import NotesPage from "./pages/NotesPage";
+import HomePage from "./pages/HomePage";
 
 export default function App() {
   return (
@@ -11,7 +11,7 @@ export default function App() {
         <span className="text-sm text-gray-500">React · Vite · Tailwind</span>
       </header>
       <Switch>
-        <Route path="/" component={NotesPage} />
+        <Route path="/" component={HomePage} />
         <Route>
           <p className="text-gray-500">Not found.</p>
         </Route>

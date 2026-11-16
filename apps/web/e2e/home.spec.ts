@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
-test("home page shows the notes UI", async ({ page }) => {
+test("home page loads and reaches the API", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("link", { name: "Scaffold" })).toBeVisible();
-  await expect(page.getByPlaceholder("New note…")).toBeVisible();
+  await expect(page.getByTestId("api-status")).toHaveText("API: ok");
 });
