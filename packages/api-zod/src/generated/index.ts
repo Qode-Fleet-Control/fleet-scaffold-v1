@@ -9,23 +9,3 @@ import zod from 'zod';
 export const getHealthResponse = zod.object({
   "status": zod.string()
 })
-
-
-export const listNotesResponseItem = zod.object({
-  "id": zod.string(),
-  "title": zod.string(),
-  "body": zod.string(),
-  "createdAt": zod.string()
-})
-export const listNotesResponse = zod.array(listNotesResponseItem)
-
-
-export const createNoteBody = zod.object({
-  "title": zod.string(),
-  "body": zod.string().optional()
-})
-
-
-export const deleteNoteParams = zod.object({
-  "id": zod.string()
-})

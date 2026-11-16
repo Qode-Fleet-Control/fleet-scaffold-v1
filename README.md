@@ -40,14 +40,15 @@ The OpenAPI/Orval pipeline is wired and generates `@scaffold/api-zod` and
 ## Prerequisites
 
 - Node.js >= 20
-- A PostgreSQL database (local or remote)
+- A PostgreSQL database (local or remote): **only if the app stores data** (see
+  [Using the database](#using-the-database))
 
 ## Setup
 
 ```bash
 npm install
-cp .env.example .env          # set DATABASE_URL
-npm run db:generate           # create the SQL migration from the schema
+cp .env.example .env          # set DATABASE_URL if the app uses the database
+npm run db:generate           # only with a database: create the SQL migration from the schema
 npm run db:migrate            # apply it (or: npm run db:push for prototyping)
 ```
 
@@ -90,7 +91,23 @@ runs fleet.conf's `DOCKER_BUILD_CMD` / `DOCKER_START_CMD` (`docker compose build
 `docker compose up`), with `$PORT` published and the workspace's own `DATABASE_URL`
 passed through — so the `local` Postgres profile is not started there. Without docker,
 `FLEET_RUNTIME=process bin/run` installs, builds and starts it as a plain Node process
-(it needs `DATABASE_URL`).
+(with `DATABASE_URL` when the app uses the database).
+
+## Using the database
+
+The database is optional. The starter app stores nothing, so it runs and ships without
+`DATABASE_URL`, and Devfab doesn't ask for one.
+
+When a feature needs to store data:
+
+1. Add `"@scaffold/db": "*"` to `dependencies` in `apps/api/package.json`, then `npm install`.
+2. Define tables in `packages/db/src/schema.ts` and use `import { db } from "@scaffold/db"`
+   in API routes.
+3. That dependency is how Devfab knows the app needs a database: from then on it requires
+   `DATABASE_URL` before the app ships, and the start script syncs the schema (`db:push`).
+
+`apps/api/src/database.test.ts` fails if API code imports `@scaffold/db` without step 1, so
+an app can't ship with a database it doesn't declare.
 
 ## Codegen (optional, spec-first)
 
@@ -120,4 +137,5 @@ npm run format                     # Prettier
 
 1. Add/extend a schema in `packages/shared/src/index.ts`.
 2. Use it in an API route (`safeParse`) and in the web client (typed `api` calls).
-3. Add a table in `packages/db/src/schema.ts`, then `npm run db:generate && npm run db:migrate`.
+3. To store it, add a table in `packages/db/src/schema.ts` (and the `@scaffold/db` dependency,
+   see [Using the database](#using-the-database)), then `npm run db:generate && npm run db:migrate`.

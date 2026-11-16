@@ -6,7 +6,6 @@ import express from "express";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import pinoHttp from "pino-http";
-import { notesRouter } from "./routes/notes";
 
 export function createApp() {
   const app = express();
@@ -29,7 +28,6 @@ export function createApp() {
   app.get("/api/health", (_req, res) => {
     res.json({ status: "ok" });
   });
-  app.use("/api/notes", notesRouter);
 
   // In production, serve the built web client from the same process.
   const clientDist = path.resolve(process.cwd(), "../web/dist");

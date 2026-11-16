@@ -4,18 +4,6 @@
  * Api
  * OpenAPI spec version: 1.0.0
  */
-export interface Note {
-  id: string;
-  title: string;
-  body: string;
-  createdAt: string;
-}
-
-export interface CreateNote {
-  title: string;
-  body?: string;
-}
-
 export type GetHealth200 = {
   status: string;
 };
