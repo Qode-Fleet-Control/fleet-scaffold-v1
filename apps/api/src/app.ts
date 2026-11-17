@@ -12,6 +12,10 @@ export function createApp() {
 
   app.use(helmet());
   app.use(cors());
+  // KEEP THIS. One log line per request (status code + responseTime) is where the workspace's
+  // Monitoring tab reads requests per second, error rate and response time from. Removing it,
+  // or turning it off in production, empties those charts. Don't log bodies, cookies or
+  // Authorization headers.
   app.use(pinoHttp());
   app.use(express.json());
   app.use(cookieParser());
