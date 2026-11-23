@@ -5,6 +5,11 @@ on:
   workflow_dispatch:
 jobs:
   scan:
+    # Only in the starter itself. A project made from this starter copies this file, but
+    # sonar-project.properties still names the starter's project and the copy's token may
+    # not scan into it, so the job failed on every push (qode-jtb, 2026-11-22). Projects
+    # are scanned by the code-scan.yml that Fleet Control writes.
+    if: github.repository == 'Qode-Fleet-Control/fleet-scaffold-v1'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
